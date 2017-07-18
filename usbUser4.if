@@ -1,0 +1,20 @@
+
+## <summary>policy for usbUser4</summary>
+########################################
+## <summary>
+##	Change to the usbUser4 role.
+## </summary>
+## <param name="role">
+##	<summary>
+##	Role allowed access.
+##	</summary>
+## </param>
+## <rolecap/>
+#
+interface(`usbUser4_role_change',`
+	gen_require(`
+		role usbUser4_r;
+	')
+
+	allow $1 usbUser4_r;
+')

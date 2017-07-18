@@ -1,0 +1,35 @@
+policy_module(usbUser, 1.0.0)
+
+########################################
+#
+# Declarations
+#
+userdom_unpriv_user_template(usbUser)
+
+########################################
+#
+# usbUser local policy
+#
+
+sysnet_dns_name_resolve(usbUser_t)
+corenet_all_recvfrom_unlabeled(usbUser_t)
+
+allow usbUser_t self:tcp_socket create_stream_socket_perms;
+corenet_tcp_sendrecv_generic_if(usbUser_t)
+corenet_tcp_sendrecv_generic_node(usbUser_t)
+corenet_tcp_sendrecv_all_ports(usbUser_t)
+corenet_tcp_bind_generic_node(usbUser_t)
+corenet_tcp_bind_all_ports(usbUser_t)
+
+allow usbUser_t self:udp_socket { create_socket_perms listen };
+corenet_udp_sendrecv_generic_if(usbUser_t)
+corenet_udp_sendrecv_generic_node(usbUser_t)
+corenet_udp_sendrecv_all_ports(usbUser_t)
+corenet_udp_bind_generic_node(usbUser_t)
+corenet_udp_bind_all_ports(usbUser_t)
+
+domain_use_interactive_fds(usbUser_t)
+
+files_read_etc_files(usbUser_t)
+
+miscfiles_read_localization(usbUser_t)

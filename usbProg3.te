@@ -1,0 +1,75 @@
+policy_module(usbProg3, 1.0.1)
+
+########################################
+#
+# Declarations
+#
+
+attribute_role usbProg3_roles;
+roleattribute system_r usbProg3_roles;
+
+type usbProg3_t;
+type usbProg3_exec_t;
+application_domain(usbProg3_t, usbProg3_exec_t)
+role usbProg3_roles types usbProg3_t;
+
+permissive usbProg3_t;
+
+type usbProg3_tmp_t;
+files_tmp_file(usbProg3_tmp_t)
+
+type usbProg3_rw_t;
+files_type(usbProg3_rw_t)
+
+########################################
+#
+# usbProg3 local policy
+#
+
+allow usbProg3_t self:fifo_file manage_fifo_file_perms;
+allow usbProg3_t self:unix_stream_socket create_stream_socket_perms;
+
+manage_dirs_pattern(usbProg3_t, usbProg3_tmp_t, usbProg3_tmp_t)
+manage_files_pattern(usbProg3_t, usbProg3_tmp_t, usbProg3_tmp_t)
+manage_lnk_files_pattern(usbProg3_t, usbProg3_tmp_t, usbProg3_tmp_t)
+files_tmp_filetrans(usbProg3_t, usbProg3_tmp_t, { dir file lnk_file })
+
+manage_dirs_pattern(usbProg3_t, usbProg3_rw_t, usbProg3_rw_t)
+manage_files_pattern(usbProg3_t, usbProg3_rw_t, usbProg3_rw_t)
+manage_lnk_files_pattern(usbProg3_t, usbProg3_rw_t, usbProg3_rw_t)
+
+domain_use_interactive_fds(usbProg3_t)
+
+files_read_etc_files(usbProg3_t)
+
+logging_send_audit_msgs(usbProg3_t)
+
+logging_send_syslog_msg(usbProg3_t)
+
+miscfiles_read_localization(usbProg3_t)
+
+optional_policy(`
+	gen_require(`
+		type usbUser4_t;
+		role usbUser4_r;
+	')
+
+	usbProg3_run(usbUser4_t, usbUser4_r)
+')
+
+optional_policy(`
+	dbus_system_bus_client(usbProg3_t)
+	dbus_connect_system_bus(usbProg3_t)
+')
+
+#domain transition##################################
+
+domtrans_pattern(usbUser4_t, usbProg3_exec_t, usbProg3_t)
+gen_require(`
+	type usbUser4_t;
+	role usbUser4_r;
+	')
+
+
+
+

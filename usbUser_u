@@ -1,0 +1,6 @@
+usbUser_r:usbUser_t:s0	usbUser_r:usbUser_t
+system_r:crond_t		usbUser_r:usbUser_t
+system_r:initrc_su_t		usbUser_r:usbUser_t
+system_r:local_login_t		usbUser_r:usbUser_t
+system_r:remote_login_t		usbUser_r:usbUser_t
+system_r:sshd_t			usbUser_r:usbUser_t

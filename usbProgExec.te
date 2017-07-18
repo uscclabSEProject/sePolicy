@@ -1,0 +1,62 @@
+
+module usbProgExec 1.0.3;
+
+require {
+	type user_tmp_t;
+	type thumb_home_t;
+	type config_home_t;
+	type user_home_dir_t;
+	type xserver_t;
+	type user_home_t;
+	type data_home_t;
+	type pulseaudio_home_t;
+	type usbProg3_rw_t;
+	type usbProg3_t;
+	type usbProg3_exec_t;
+	type bin_t;
+	type iceauth_home_t;
+	type fs_t;
+	type usbUser4_dbusd_t;
+	type user_devpts_t;
+	type xdm_var_run_t;
+	type usbUser4_t;
+	type tmpfs_t;
+	class filesystem getattr;
+	class process getattr;
+	class sock_file { create setattr unlink };
+	class chr_file { read write };
+	class file { create execute getattr open read rename setattr unlink write };
+	class dir { add_name create read remove_name rmdir write };
+	class unix_stream_socket connectto;
+}
+
+#============= usbProg3_t ==============
+
+#!!!! WARNING: 'bin_t' is a base type.
+allow usbProg3_t bin_t:file execute;
+allow usbProg3_t config_home_t:dir { add_name read write };
+allow usbProg3_t config_home_t:file { create getattr open read write };
+allow usbProg3_t data_home_t:dir { add_name read remove_name write };
+allow usbProg3_t data_home_t:file { create getattr open read rename setattr unlink write };
+allow usbProg3_t fs_t:filesystem getattr;
+allow usbProg3_t iceauth_home_t:file { getattr open read };
+allow usbProg3_t pulseaudio_home_t:file { getattr open read };
+allow usbProg3_t thumb_home_t:file { getattr open read };
+allow usbProg3_t tmpfs_t:file { read write };
+allow usbProg3_t usbUser4_dbusd_t:unix_stream_socket connectto;
+allow usbProg3_t usbUser4_t:unix_stream_socket connectto;
+allow usbProg3_t user_devpts_t:chr_file { read write };
+allow usbProg3_t user_home_dir_t:dir read;
+allow usbProg3_t user_home_t:dir read;
+allow usbProg3_t user_home_t:file { open read };
+allow usbProg3_t user_tmp_t:dir { add_name create remove_name rmdir write };
+allow usbProg3_t user_tmp_t:sock_file { create setattr unlink };
+allow usbProg3_t xdm_var_run_t:file { getattr open read };
+allow usbProg3_t xserver_t:unix_stream_socket connectto;
+
+#============= usbUser4_t ==============
+
+#!!!! The file '/home/usb3/program/whiteList' is mislabeled on your system.  
+#!!!! Fix with $ restorecon -R -v /home/usb3/program/whiteList
+allow usbUser4_t usbProg3_rw_t:file  { getattr };
+allow usbUser4_t usbProg3_exec_t:file  {open write read getattr };

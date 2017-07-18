@@ -1,0 +1,12 @@
+policy_module(usbProg, 1.0.0)
+
+type usbProg_t;
+file_type(usbProg_t)
+
+gen_require(`
+	type usbUser4_t;
+')
+
+admin_pattern(usbUser4_t,usbProg_t,usbProg_t)
+
+

@@ -1,0 +1,83 @@
+policy_module(usbUser4, 1.3.1)
+
+########################################
+#
+# Declarations
+#
+gen_tunable(usbUser4_read_user_files, false)
+gen_tunable(usbUser4_manage_user_files, false)
+userdom_restricted_xwindows_user_template(usbUser4)
+
+########################################
+#
+# usbUser4 local policy
+#
+
+#################define type
+
+
+sysnet_dns_name_resolve(usbUser4_t)
+corenet_all_recvfrom_unlabeled(usbUser4_t)
+
+allow usbUser4_t self:tcp_socket create_stream_socket_perms;
+corenet_tcp_sendrecv_generic_if(usbUser4_t)
+corenet_tcp_sendrecv_generic_node(usbUser4_t)
+corenet_tcp_sendrecv_all_ports(usbUser4_t)
+corenet_tcp_bind_generic_node(usbUser4_t)
+corenet_tcp_bind_all_ports(usbUser4_t)
+
+allow usbUser4_t self:udp_socket { create_socket_perms listen };
+corenet_udp_sendrecv_generic_if(usbUser4_t)
+corenet_udp_sendrecv_generic_node(usbUser4_t)
+corenet_udp_sendrecv_all_ports(usbUser4_t)
+corenet_udp_bind_generic_node(usbUser4_t)
+corenet_udp_bind_all_ports(usbUser4_t)
+
+domain_use_interactive_fds(usbUser4_t)
+
+files_read_etc_files(usbUser4_t)
+
+miscfiles_read_localization(usbUser4_t)
+
+sudo_exec(usbUser4_t)
+#domtrans_pattern(usbUser4_t, sudo_exec_t, unconfined_t)
+
+#gen_require(`
+#	type unconfined_t;
+#')
+
+allow usbUser4_t self:capability { dac_override dac_read_search kill sys_ptrace sys_nice };
+files_dontaudit_search_all_dirs(usbUser4_t)
+
+selinux_get_enforce_mode(usbUser4_t)
+seutil_domtrans_setfiles(usbUser4_t)
+seutil_search_default_contexts(usbUser4_t)
+
+logging_send_syslog_msg(usbUser4_t)
+
+kernel_read_system_state(usbUser4_t)
+
+domain_dontaudit_search_all_domains_state(usbUser4_t)
+domain_dontaudit_ptrace_all_domains(usbUser4_t)
+
+userdom_dontaudit_search_admin_dir(usbUser4_t)
+userdom_dontaudit_search_user_home_dirs(usbUser4_t)
+
+tunable_policy(`usbUser4_read_user_files',`
+        userdom_read_user_home_content_files(usbUser4_t)
+        userdom_read_user_tmp_files(usbUser4_t)
+')
+
+tunable_policy(`usbUser4_manage_user_files',`
+	userdom_manage_user_home_content_dirs(usbUser4_t)
+	userdom_manage_user_home_content_files(usbUser4_t)
+	userdom_manage_user_home_content_symlinks(usbUser4_t)
+        userdom_manage_user_tmp_files(usbUser4_t)
+')
+
+
+gen_require(`
+        role unconfined_r;
+')
+
+allow unconfined_r usbUser4_r;

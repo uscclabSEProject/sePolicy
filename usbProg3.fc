@@ -1,0 +1,7 @@
+
+/home/usb3/program(/.*)?		gen_context(system_u:object_r:usbProg3_rw_t,s0)
+
+
+/home/usb3/program/control		--	gen_context(system_u:object_r:usbProg3_rw_t,s0)
+
+/home/usb3/program/eog		--	gen_context(system_u:object_r:usbProg3_exec_t,s0)
