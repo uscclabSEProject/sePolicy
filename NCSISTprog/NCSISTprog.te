@@ -1,0 +1,97 @@
+policy_module(NCSISTprog, 1.1.0)
+
+########################################
+#
+# Declarations
+#
+
+attribute_role NCSISTprog_roles;
+roleattribute system_r NCSISTprog_roles;
+
+type NCSISTprog_t;
+type NCSISTprog_exec_t;
+application_domain(NCSISTprog_t, NCSISTprog_exec_t)
+role NCSISTprog_roles types NCSISTprog_t;
+
+permissive NCSISTprog_t;
+
+type NCSISTprog_tmp_t;
+files_tmp_file(NCSISTprog_tmp_t)
+
+type NCSISTprog_rw_t;
+files_type(NCSISTprog_rw_t)
+
+########################################
+#
+# NCSISTprog local policy
+#
+
+allow NCSISTprog_t self:fifo_file manage_fifo_file_perms;
+allow NCSISTprog_t self:unix_stream_socket create_stream_socket_perms;
+
+manage_dirs_pattern(NCSISTprog_t, NCSISTprog_tmp_t, NCSISTprog_tmp_t)
+manage_files_pattern(NCSISTprog_t, NCSISTprog_tmp_t, NCSISTprog_tmp_t)
+manage_lnk_files_pattern(NCSISTprog_t, NCSISTprog_tmp_t, NCSISTprog_tmp_t)
+files_tmp_filetrans(NCSISTprog_t, NCSISTprog_tmp_t, { dir file lnk_file })
+
+manage_dirs_pattern(NCSISTprog_t, NCSISTprog_rw_t, NCSISTprog_rw_t)
+manage_files_pattern(NCSISTprog_t, NCSISTprog_rw_t, NCSISTprog_rw_t)
+manage_lnk_files_pattern(NCSISTprog_t, NCSISTprog_rw_t, NCSISTprog_rw_t)
+
+sysnet_dns_name_resolve(NCSISTprog_t)
+corenet_all_recvfrom_unlabeled(NCSISTprog_t)
+
+allow NCSISTprog_t self:tcp_socket create_stream_socket_perms;
+corenet_tcp_sendrecv_generic_if(NCSISTprog_t)
+corenet_tcp_sendrecv_generic_node(NCSISTprog_t)
+corenet_tcp_sendrecv_all_ports(NCSISTprog_t)
+corenet_tcp_bind_generic_node(NCSISTprog_t)
+corenet_tcp_bind_all_unreserved_ports(NCSISTprog_t)
+corenet_tcp_connect_all_ports(NCSISTprog_t)
+
+allow NCSISTprog_t self:udp_socket { create_socket_perms listen };
+corenet_udp_sendrecv_generic_if(NCSISTprog_t)
+corenet_udp_sendrecv_generic_node(NCSISTprog_t)
+corenet_udp_sendrecv_all_ports(NCSISTprog_t)
+corenet_udp_bind_generic_node(NCSISTprog_t)
+corenet_udp_bind_all_unreserved_ports(NCSISTprog_t)
+
+domain_use_interactive_fds(NCSISTprog_t)
+
+files_read_etc_files(NCSISTprog_t)
+
+auth_domtrans_chk_passwd(NCSISTprog_t)
+
+logging_send_audit_msgs(NCSISTprog_t)
+
+logging_send_syslog_msg(NCSISTprog_t)
+
+miscfiles_read_localization(NCSISTprog_t)
+
+optional_policy(`
+	gen_require(`
+		type NCSISTuser_t;
+		role NCSISTuser_r;
+	')
+
+	NCSISTprog_run(NCSISTuser_t, NCSISTuser_r)
+')
+
+optional_policy(`
+	dbus_system_bus_client(NCSISTprog_t)
+	dbus_connect_system_bus(NCSISTprog_t)
+')
+
+
+
+################# domain transition ######################
+#
+#
+domtrans_pattern(NCSISTuser_t, NCSISTprog_exec_t, NCSISTprog_t)
+gen_require(`
+	type NCSISTuser_t;
+	role NCSISTuser_r;
+	')
+
+
+

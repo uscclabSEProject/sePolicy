@@ -1,28 +1,0 @@
-
-module usbUserSEgui 1.1;
-
-require {
-	type semanage_store_t;
-	type sudo_db_t;
-	type sudo_exec_t;
-	type security_t;
-	type user_devpts_t;
-	type usbUser4_t;
-	type abrt_etc_t;
-	class capability { fowner net_admin setgid setuid sys_resource };
-	class security { compute_relabel setenforce };
-	class chr_file { relabelfrom relabelto };
-	class file { lock open read write };
-	class dir read;
-}
-
-#============= usbUser4_t ==============
-allow usbUser4_t abrt_etc_t:file { open read };
-allow usbUser4_t security_t:security { compute_relabel setenforce };
-allow usbUser4_t self:capability { fowner net_admin setgid setuid sys_resource };
-allow usbUser4_t semanage_store_t:dir read;
-allow usbUser4_t semanage_store_t:file { open read };
-allow usbUser4_t sudo_exec_t:file {read getattr open execute execute_on_trans};
-allow usbUser4_t sudo_db_t:file { lock open read write };
-allow usbUser4_t user_devpts_t:chr_file { relabelfrom relabelto };
-

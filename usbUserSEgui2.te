@@ -1,10 +1,0 @@
-
-module usbUserSEgui2 1.0;
-
-require {
-	type usbUser4_t;
-	class capability { setgid setuid };
-}
-
-#============= usbUser4_t ==============
-allow usbUser4_t self:capability { setgid setuid };

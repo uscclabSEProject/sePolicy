@@ -1,0 +1,294 @@
+
+## <summary>policy for NCSISTprog</summary>
+
+########################################
+## <summary>
+##	Execute NCSISTprog_exec_t in the NCSISTprog domain.
+## </summary>
+## <param name="domain">
+## <summary>
+##	Domain allowed to transition.
+## </summary>
+## </param>
+#
+interface(`NCSISTprog_domtrans',`
+	gen_require(`
+		type NCSISTprog_t, NCSISTprog_exec_t;
+	')
+
+	corecmd_search_bin($1)
+	domtrans_pattern($1, NCSISTprog_exec_t, NCSISTprog_t)
+')
+
+######################################
+## <summary>
+##	Execute NCSISTprog in the caller domain.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`NCSISTprog_exec',`
+	gen_require(`
+		type NCSISTprog_exec_t;
+	')
+
+	corecmd_search_bin($1)
+	can_exec($1, NCSISTprog_exec_t)
+')
+
+########################################
+## <summary>
+##	Do not audit attempts to read,
+##	NCSISTprog tmp files
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain to not audit.
+##	</summary>
+## </param>
+#
+interface(`NCSISTprog_dontaudit_read_tmp_files',`
+	gen_require(`
+		type NCSISTprog_tmp_t;
+	')
+
+	dontaudit $1 NCSISTprog_tmp_t:file read_file_perms;
+')
+
+########################################
+## <summary>
+##	Read NCSISTprog tmp files
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`NCSISTprog_read_tmp_files',`
+	gen_require(`
+		type NCSISTprog_tmp_t;
+	')
+
+	files_search_tmp($1)
+	read_files_pattern($1, NCSISTprog_tmp_t, NCSISTprog_tmp_t)
+')
+
+########################################
+## <summary>
+##	Manage NCSISTprog tmp files
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`NCSISTprog_manage_tmp',`
+	gen_require(`
+		type NCSISTprog_tmp_t;
+	')
+
+	files_search_tmp($1)
+	manage_dirs_pattern($1, NCSISTprog_tmp_t, NCSISTprog_tmp_t)
+	manage_files_pattern($1, NCSISTprog_tmp_t, NCSISTprog_tmp_t)
+	manage_lnk_files_pattern($1, NCSISTprog_tmp_t, NCSISTprog_tmp_t)
+')
+
+########################################
+## <summary>
+##	Search NCSISTprog rw directories.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`NCSISTprog_search_rw_dir',`
+	gen_require(`
+		type NCSISTprog_rw_t;
+	')
+
+	allow $1 NCSISTprog_rw_t:dir search_dir_perms;
+	files_search_rw($1)
+')
+
+########################################
+## <summary>
+##	Read NCSISTprog rw files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`NCSISTprog_read_rw_files',`
+	gen_require(`
+		type NCSISTprog_rw_t;
+	')
+
+	read_files_pattern($1, NCSISTprog_rw_t, NCSISTprog_rw_t)
+	allow $1 NCSISTprog_rw_t:dir list_dir_perms;
+	files_search_rw($1)
+')
+
+########################################
+## <summary>
+##	Manage NCSISTprog rw files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`NCSISTprog_manage_rw_files',`
+	gen_require(`
+		type NCSISTprog_rw_t;
+	')
+
+	manage_files_pattern($1, NCSISTprog_rw_t, NCSISTprog_rw_t)
+')
+
+########################################
+## <summary>
+##	Create, read, write, and delete
+##	NCSISTprog rw dirs.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`NCSISTprog_manage_rw_dirs',`
+	gen_require(`
+		type NCSISTprog_rw_t;
+	')
+
+	manage_dirs_pattern($1, NCSISTprog_rw_t, NCSISTprog_rw_t)
+')
+
+
+########################################
+## <summary>
+##	Execute NCSISTprog in the NCSISTprog domain, and
+##	allow the specified role the NCSISTprog domain.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed to transition
+##	</summary>
+## </param>
+## <param name="role">
+##	<summary>
+##	The role to be allowed the NCSISTprog domain.
+##	</summary>
+## </param>
+#
+interface(`NCSISTprog_run',`
+	gen_require(`
+		type NCSISTprog_t;
+		attribute_role NCSISTprog_roles;
+	')
+
+	NCSISTprog_domtrans($1)
+	roleattribute $2 NCSISTprog_roles;
+')
+
+########################################
+## <summary>
+##	Role access for NCSISTprog
+## </summary>
+## <param name="role">
+##	<summary>
+##	Role allowed access
+##	</summary>
+## </param>
+## <param name="domain">
+##	<summary>
+##	User domain for the role
+##	</summary>
+## </param>
+#
+interface(`NCSISTprog_role',`
+	gen_require(`
+		type NCSISTprog_t;
+		attribute_role NCSISTprog_roles;
+	')
+
+	roleattribute $1 NCSISTprog_roles;
+
+	NCSISTprog_domtrans($2)
+
+	ps_process_pattern($2, NCSISTprog_t)
+	allow $2 NCSISTprog_t:process { signull signal sigkill };
+')
+
+########################################
+## <summary>
+##	Send and receive messages from
+##	NCSISTprog over dbus.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`NCSISTprog_dbus_chat',`
+	gen_require(`
+		type NCSISTprog_t;
+		class dbus send_msg;
+	')
+
+	allow $1 NCSISTprog_t:dbus send_msg;
+	allow NCSISTprog_t $1:dbus send_msg;
+')
+
+########################################
+## <summary>
+##	All of the rules required to administrate
+##	an NCSISTprog environment
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+## <param name="role">
+##	<summary>
+##	Role allowed access.
+##	</summary>
+## </param>
+## <rolecap/>
+#
+interface(`NCSISTprog_admin',`
+	gen_require(`
+		type NCSISTprog_t;
+		type NCSISTprog_tmp_t;
+		type NCSISTprog_rw_t;
+	')
+
+	allow $1 NCSISTprog_t:process { signal_perms };
+	ps_process_pattern($1, NCSISTprog_t)
+
+    tunable_policy(`deny_ptrace',`',`
+        allow $1 NCSISTprog_t:process ptrace;
+    ')
+
+	files_search_tmp($1)
+	admin_pattern($1, NCSISTprog_tmp_t)
+
+	files_search_etc($1)
+	admin_pattern($1, NCSISTprog_rw_t)
+	optional_policy(`
+		systemd_passwd_agent_exec($1)
+		systemd_read_fifo_file_passwd_run($1)
+	')
+')

@@ -1,10 +1,0 @@
-
-module usbUserSEgui3 1.0;
-
-require {
-	type usbUser4_t;
-	class capability sys_resource;
-}
-
-#============= usbUser4_t ==============
-allow usbUser4_t self:capability sys_resource;

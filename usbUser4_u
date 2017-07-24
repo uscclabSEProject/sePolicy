@@ -1,7 +1,0 @@
-usbUser4_r:usbUser4_t	usbUser4_r:usbUser4_t
-system_r:crond_t		usbUser4_r:usbUser4_t
-system_r:initrc_su_t		usbUser4_r:usbUser4_t
-system_r:local_login_t		usbUser4_r:usbUser4_t
-system_r:remote_login_t		usbUser4_r:usbUser4_t
-system_r:sshd_t				usbUser4_r:usbUser4_t
-system_r:xdm_t				usbUser4_r:usbUser4_t
