@@ -1,0 +1,20 @@
+
+## <summary>policy for NCSISTuser</summary>
+########################################
+## <summary>
+##	Change to the NCSISTuser role.
+## </summary>
+## <param name="role">
+##	<summary>
+##	Role allowed access.
+##	</summary>
+## </param>
+## <rolecap/>
+#
+interface(`NCSISTuser_role_change',`
+	gen_require(`
+		role NCSISTuser_r;
+	')
+
+	allow $1 NCSISTuser_r;
+')

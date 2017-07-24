@@ -1,0 +1,7 @@
+NCSISTuser_r:NCSISTuser_t	NCSISTuser_r:NCSISTuser_t
+system_r:crond_t		NCSISTuser_r:NCSISTuser_t
+system_r:initrc_su_t		NCSISTuser_r:NCSISTuser_t
+system_r:local_login_t		NCSISTuser_r:NCSISTuser_t
+system_r:remote_login_t		NCSISTuser_r:NCSISTuser_t
+system_r:sshd_t				NCSISTuser_r:NCSISTuser_t
+system_r:xdm_t				NCSISTuser_r:NCSISTuser_t
