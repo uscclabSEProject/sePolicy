@@ -1,0 +1,32 @@
+policy_module(NCnetwork,1.0.0)
+
+gen_require(`
+	type NCSISTuser_t;
+	
+')
+
+allow NCSISTuser_t self:tcp_socket create_stream_socket_perms;
+allow NCSISTuser_t self:udp_socket create_socket_perms;
+
+corenet_all_recvfrom_unlabeled(NCSISTuser_t)
+corenet_all_recvfrom_netlabel(NCSISTuser_t)
+corenet_tcp_sendrecv_generic_if(NCSISTuser_t)
+corenet_udp_sendrecv_generic_if(NCSISTuser_t)
+corenet_tcp_sendrecv_generic_node(NCSISTuser_t)
+corenet_udp_sendrecv_generic_node(NCSISTuser_t)
+corenet_tcp_sendrecv_all_ports(NCSISTuser_t)
+corenet_udp_sendrecv_all_ports(NCSISTuser_t)
+corenet_tcp_connect_all_ports(NCSISTuser_t)
+corenet_sendrecv_all_client_packets(NCSISTuser_t)
+
+corenet_all_recvfrom_labeled(NCSISTuser_t, NCSISTuser_t)
+
+optional_policy(`
+	init_tcp_recvfrom_all_daemons(NCSISTuser_t)
+	init_udp_recvfrom_all_daemons(NCSISTuser_t)
+')
+
+optional_policy(`
+	ipsec_match_default_spd(NCSISTuser_t)
+')
+

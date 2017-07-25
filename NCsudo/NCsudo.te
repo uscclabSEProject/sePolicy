@@ -1,0 +1,7 @@
+policy_module(NCsudo,1.0.0)
+gen_require(`
+	type NCSISTuser_t;
+	role NCSISTuser_r;
+')
+
+sudo_role_template(NCSISTuser, NCSISTuser_r, NCSISTuser_t);
