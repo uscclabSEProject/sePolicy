@@ -1,0 +1,70 @@
+policy_module(noNetwork, 1.0.0)
+
+########################################
+#
+# Declarations
+#
+
+attribute_role noNetwork_roles;
+roleattribute system_r noNetwork_roles;
+
+type noNetwork_t;
+type noNetwork_exec_t;
+application_domain(noNetwork_t, noNetwork_exec_t)
+role noNetwork_roles types noNetwork_t;
+
+permissive noNetwork_t;
+
+type noNetwork_tmp_t;
+files_tmp_file(noNetwork_tmp_t)
+
+########################################
+#
+# noNetwork local policy
+#
+
+allow noNetwork_t self:fifo_file manage_fifo_file_perms;
+allow noNetwork_t self:unix_stream_socket create_stream_socket_perms;
+
+manage_dirs_pattern(noNetwork_t, noNetwork_tmp_t, noNetwork_tmp_t)
+manage_files_pattern(noNetwork_t, noNetwork_tmp_t, noNetwork_tmp_t)
+manage_lnk_files_pattern(noNetwork_t, noNetwork_tmp_t, noNetwork_tmp_t)
+files_tmp_filetrans(noNetwork_t, noNetwork_tmp_t, { dir file lnk_file })
+
+domain_use_interactive_fds(noNetwork_t)
+
+files_read_etc_files(noNetwork_t)
+
+miscfiles_read_localization(noNetwork_t)
+
+#------
+
+
+require {
+
+	type ncsist_t;
+        role ncsist_r;
+}
+
+#type_transition ncsist_t noNetwork_exec_t:process noNetwork_t;
+#roleattribute ncsist_r noNetwork_roles;
+#allow ncsist_t noNetwork_exec_t:file {getattr execute};
+#allow noNetwork_t noNetwork_exec_t:file entrypoint;
+#allow ncsist_t noNetwork_t:process transition;
+
+
+#domtrans_pattern(ncsist_t, noNetwork_exec_t, noNetwork_t)
+
+#-------
+
+optional_policy(`
+	gen_require(`
+		type ncsist_t;
+		role ncsist_r;
+	')
+
+	noNetwork_run(ncsist_t, ncsist_r)
+')
+
+
+
