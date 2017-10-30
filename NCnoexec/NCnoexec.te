@@ -1,0 +1,30 @@
+policy_module(NCnoexec, 1.0.0)
+
+########################################
+#
+# Declarations
+#
+
+
+type NCnoexec_t;
+files_type(NCnoexec_t)
+
+
+
+########################################
+#
+# NCnoexec local policy
+#
+
+
+require {
+
+	type NCSISTuser_t;
+}
+
+admin_pattern(NCSISTuser_t, NCnoexec_t, NCnoexec_t)
+
+
+
+
+
