@@ -43,7 +43,7 @@ make -f /usr/share/selinux/devel/Makefile NCnoexec.pp || exit
 /usr/sbin/semodule -i NCnoexec.pp
 
 
-# Fixing the file context on /home/uscc/Desktop/NCSIST/uscclabSEProject/seProgram
+# Fixing the file context on /tmp/mozilla_NCSISTuser0
 /sbin/restorecon -Rv /tmp/mozilla_NCSISTuser0
 
 
