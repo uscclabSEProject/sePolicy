@@ -43,6 +43,13 @@ make -f /usr/share/selinux/devel/Makefile NCnoexec.pp || exit
 /usr/sbin/semodule -i NCnoexec.pp
 
 
+
+# Set the file context on /home/NCSISTuser/Downloads
+semanage fcontext -a -t NCnoexec_t "/home/NCSISTuser/Downloads(/.*)?"
+
+# Fixing the file context on /home/NCSISTuser/Downloads
+/sbin/restorecon -Rv /home/NCSISTuser/Downloads
+
 # Fixing the file context on /tmp/mozilla_NCSISTuser0
 /sbin/restorecon -Rv /tmp/mozilla_NCSISTuser0
 
