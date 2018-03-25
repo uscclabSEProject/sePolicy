@@ -20,40 +20,40 @@ require {
 	type xdm_var_run_t;
 	type NCSISTuser_t;
 	type tmpfs_t;
-	class filesystem getattr;
+	class filesystem getattr;
 	class process getattr;
-	class sock_file { create setattr unlink };
-	class chr_file { read write };
-	class file { create execute getattr open read rename setattr unlink write };
-	class dir { add_name create read remove_name rmdir write };
-	class unix_stream_socket connectto;
+	class sock_file { create setattr unlink };
+	class chr_file { read write };
+	class file { create execute getattr open read rename setattr unlink write };
+	class dir { add_name create read remove_name rmdir write };
+	class unix_stream_socket connectto;
 }
 
 #============= NCSISTprog_t ==============
 
 #!!!! WARNING: 'bin_t' is a base type.
-allow NCSISTprog_t bin_t:file execute;
-allow NCSISTprog_t config_home_t:dir { add_name read write };
-allow NCSISTprog_t config_home_t:file { create getattr open read write };
-allow NCSISTprog_t data_home_t:dir { add_name read remove_name write };
-allow NCSISTprog_t data_home_t:file { create getattr open read rename setattr unlink write };
-allow NCSISTprog_t fs_t:filesystem getattr;
-allow NCSISTprog_t iceauth_home_t:file { getattr open read };
-allow NCSISTprog_t pulseaudio_home_t:file { getattr open read };
-allow NCSISTprog_t thumb_home_t:file { getattr open read };
-allow NCSISTprog_t tmpfs_t:file { read write };
-allow NCSISTprog_t NCSISTuser_dbusd_t:unix_stream_socket connectto;
-allow NCSISTprog_t NCSISTuser_t:unix_stream_socket connectto;
-allow NCSISTprog_t user_devpts_t:chr_file { read write };
-allow NCSISTprog_t user_home_dir_t:dir read;
-allow NCSISTprog_t user_home_t:dir read;
-allow NCSISTprog_t user_home_t:file { open read };
-allow NCSISTprog_t user_tmp_t:dir { add_name create remove_name rmdir write };
-allow NCSISTprog_t user_tmp_t:sock_file { create setattr unlink };
-allow NCSISTprog_t xdm_var_run_t:file { getattr open read };
-allow NCSISTprog_t xserver_t:unix_stream_socket connectto;
+allow NCSISTprog_t bin_t:file execute;
+allow NCSISTprog_t config_home_t:dir { add_name read write };
+allow NCSISTprog_t config_home_t:file { create getattr open read write };
+allow NCSISTprog_t data_home_t:dir { add_name read remove_name write };
+allow NCSISTprog_t data_home_t:file { create getattr open read rename setattr unlink write };
+allow NCSISTprog_t fs_t:filesystem getattr;
+allow NCSISTprog_t iceauth_home_t:file { getattr open read };
+allow NCSISTprog_t pulseaudio_home_t:file { getattr open read };
+allow NCSISTprog_t thumb_home_t:file { getattr open read };
+allow NCSISTprog_t tmpfs_t:file { read write };
+allow NCSISTprog_t NCSISTuser_dbusd_t:unix_stream_socket connectto;
+allow NCSISTprog_t NCSISTuser_t:unix_stream_socket connectto;
+allow NCSISTprog_t user_devpts_t:chr_file { read write };
+allow NCSISTprog_t user_home_dir_t:dir read;
+allow NCSISTprog_t user_home_t:dir read;
+allow NCSISTprog_t user_home_t:file { open read };
+allow NCSISTprog_t user_tmp_t:dir { add_name create remove_name rmdir write };
+allow NCSISTprog_t user_tmp_t:sock_file { create setattr unlink };
+allow NCSISTprog_t xdm_var_run_t:file { getattr open read };
+allow NCSISTprog_t xserver_t:unix_stream_socket connectto;
 
 #============= NCSISTuser_t ==============
 
-allow NCSISTuser_t NCSISTprog_rw_t:file  { getattr };
-allow NCSISTuser_t NCSISTprog_exec_t:file  {open write read getattr };
+allow NCSISTuser_t NCSISTprog_rw_t:file  { getattr };
+allow NCSISTuser_t NCSISTprog_exec_t:file  { open write read getattr };
