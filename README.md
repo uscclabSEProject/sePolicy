@@ -1,3 +1,4 @@
+First Move install.sh script to parent folder.
 ## 執行 install.sh，會產生以下動作 
 - 創建 linux user NCSISTuser，並設定密碼為 uscc
 - 安裝 NCSISTuser module 
