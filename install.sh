@@ -1,11 +1,15 @@
 #!/bin/sh
 
 # Please use sudo to execute this script unless you are root.
- 
+if [ `id -u` != "0" ] ; then
+        echo "Please run with sudo right."
+	exit 1
+fi
+
 
 # change excute permission of shellscripts below
-chmod +100 sePolicy/NCprocess/NCSISTuser/NCSISTuser.sh
-chmod +100 sePolicy/NCprocess/NCSISTprog/NCSISTprog.sh
+chmod +100 sePolicy/NCSISTuser/NCSISTuser.sh
+chmod +100 sePolicy/NCSISTprog/NCSISTprog.sh
 chmod +100 sePolicy/NCnoexec/NCnoexec.sh
 
 # create Linux user NCSISTuser
@@ -15,7 +19,7 @@ useradd NCSISTuser
   echo "uscc" ) | passwd NCSISTuser  
 
 # install NCSISTuser module : create SElinux label => NCSISTuser_u:NCSISTuser_r:NCSISTuser_t
-./sePolicy/NCprocess/NCSISTuser/NCSISTuser.sh
+./sePolicy/NCSISTuser/NCSISTuser.sh
 
 # bind SElinux user and Linux user
 semanage login -a -s NCSISTuser_u NCSISTuser
@@ -27,13 +31,13 @@ cp -r seProgram /home/NCSISTuser/program
 chown -R NCSISTuser:NCSISTuser /home/NCSISTuser/program
 
 # install NCSISTprog module
-./sePolicy/NCprocess/NCSISTprog/NCSISTprog.sh
+./sePolicy/NCSISTprog/NCSISTprog.sh
 
 
 # compile and install NCSISTprogexec module
-checkmodule -M -m -o sePolicy/NCprocess/NCSISTprogexec/NCSISTprogexec.mod sePolicy/NCprocess/NCSISTprogexec/NCSISTprogexec.te
-semodule_package -o sePolicy/NCprocess/NCSISTprogexec/NCSISTprogexec.pp -m sePolicy/NCprocess/NCSISTprogexec/NCSISTprogexec.mod
-semodule -i sePolicy/NCprocess/NCSISTprogexec/NCSISTprogexec.pp
+checkmodule -M -m -o sePolicy/NCSISTprogexec/NCSISTprogexec.mod sePolicy/NCSISTprogexec/NCSISTprogexec.te
+semodule_package -o sePolicy/NCSISTprogexec/NCSISTprogexec.pp -m sePolicy/NCSISTprogexec/NCSISTprogexec.mod
+semodule -i sePolicy/NCSISTprogexec/NCSISTprogexec.pp
 
 # temporarily open port 9000 for listener to listen pp.py
 firewall-cmd --add-port=9000/tcp
@@ -52,10 +56,6 @@ chcon -u NCSISTuser_u /home/NCSISTuser/Downloads
 # install NCnoexec module
 ./sePolicy/NCnoexec/NCnoexec.sh
 
-if [ `id -u` != "0" ] ; then
-        echo "Please run with sudo right."
-	exit 1
-fi
 echo "Install NCsudo module."
 make -f /usr/share/selinux/devel/Makefile sePolicy/NCsudo/NCsudo.pp
 semodule -i sePolicy/NCsudo/NCsudo.pp
