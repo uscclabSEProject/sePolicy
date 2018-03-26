@@ -1,4 +1,4 @@
-## 執行 techniqueDeliver.sh，會產生以下動作 
+## 執行 install.sh，會產生以下動作 
 - 創建 linux user NCSISTuser，並設定密碼為 uscc
 - 安裝 NCSISTuser module 
 - 綁定 linux user 與 SElinux user => ( NCSISTuser, NCSISTuser_u ) 
